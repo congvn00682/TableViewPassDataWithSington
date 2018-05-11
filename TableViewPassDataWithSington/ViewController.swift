@@ -10,16 +10,31 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var dataSource = DataSource()
+    
+    @IBOutlet weak var dataTable: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        dataTable.dataSource = dataSource
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let index = dataTable.indexPathForSelectedRow{
+            Singleton.shared.number = dataSource.arr[index.row]
+        }
+    }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if let index = dataTable.indexPathForSelectedRow{
+            dataSource.arr[index.row] = Singleton.shared.number!
+            dataTable.reloadData()
+        }
+    }
+    
 }
 
